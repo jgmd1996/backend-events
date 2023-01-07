@@ -1,7 +1,7 @@
 import  express  from "express";
-import produtos from "./produtosRoutes.js";
-import categories from "./categoriesRoutes.js";
-
+import event from "./EventRoutes.js";
+import genre from "./GenreRoutes.js";
+import band from "./BandRoutes.js";
 const routes = (app) => {
     app.route('/').get((req, res) =>{
         res.status(200).send({titulo: "Curso de node"})
@@ -9,8 +9,10 @@ const routes = (app) => {
 
     app.use(
         express.json(),
-        produtos,
-        categories
+        event,
+        genre,
+        band
+
     )
 }
 

@@ -4,7 +4,6 @@ const bandSchema = new mongoose.Schema(
     {
         id: {type: String},
         name: {type: String, required: true},
-        MusicalGenre: {type: String, required: true},
         numberMembers: {type: Number, required: true},
         contact: {type: Number, required: true},
         email: {type: String, required: true},
@@ -13,6 +12,7 @@ const bandSchema = new mongoose.Schema(
         targetAudience: {type: String, required: true},
         cache: {type: Number, required: true},
         genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'genre' }],
+        event: [{ type: mongoose.Schema.Types.ObjectId, ref: 'event' }],
     },
     {
         versionKey: false
