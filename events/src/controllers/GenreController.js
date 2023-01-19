@@ -1,4 +1,72 @@
 import genre from "../models/Genre.js";
+const GenreService = require('../service/genreService');
+
+let genreService = new GenreService();
+
+
+exports.create = async function (req, res, next) {
+
+  try {
+
+     const genreSaved = genreService.create(req.body);
+    
+    res.status(genreSaved.statusCode).send(genreSaved.genre.toJSON())
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+exports.update = async function (req, res, next) {
+
+  try {
+
+
+      let art = {
+          ...req.body
+      };
+
+      const authUser = req.user;
+      const isAdmin = await artService.checkOnlyAdminPermissions(authUser);
+
+      if (!isAdmin) {
+          art.status = art.isMonetized ? constants.STATUS_ART.inEvaluation.code : constants.STATUS_ART.active.code;
+      }
+
+      const artSaved = await artService.update(art, imageContent, imageExtension);
+
+      return res.status(artSaved.statusCode).json(artSaved);
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+
+exports.findById = async function (req, res, next) {
+
+  try {
+
+      const { artId } = req.params;
+
+      const art = await artService.findById(artId);
+
+      if (!art) {
+          return res.status(404).send({message: 'Arte não encontrada.'});
+      }
+
+      return res.status(200).json({art: art ? art.toClient() : art});
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 class GenreController {
 
@@ -28,16 +96,9 @@ class GenreController {
   }
 
   static registerGender = (req, res) => {
-    let genres = new genre(req.body);
-
-    genres.save((err) => {
-
-      if (err) {
-        res.status(500).send({ message: `${err.message} - falha ao cadastrar genero.` })
-      } else {
-        res.status(201).send(genres.toJSON())
-      }
-    })
+    // const genreSaved = genreService.create(req.body);
+    
+    // res.status(genreSaved.statusCode).send(genreSaved.genre.toJSON())
   }
 
   static updateGender = (req, res) => {

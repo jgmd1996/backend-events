@@ -2,9 +2,6 @@ import express from "express";
 import db from "./config/dbConnect.js"
 import routes from "./routes/index.js"
 import cors from 'cors';
-//const cors = require('cors');
-
-
 
 db.on("error", console.log.bind(console, 'Erro de conexão'))
 db.once("open", () => {
@@ -17,6 +14,13 @@ app.use(
     origin: "*",
   })
 )
+
+const errorResponse = (err, req, res, next) => {
+  logger.error(err.message);
+  res.status(500).send(err.message);
+};
+
+app.use(errorResponse);
 
 app.use(express.json())
 routes(app);
