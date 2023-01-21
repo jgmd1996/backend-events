@@ -1,6 +1,6 @@
 const validate = require('validate.js');
-import genre from '../models/Genre';
-import BaseService from './baseService';
+const genre = require('../models/Genre');
+const BaseService = require("./baseService");
 
     const schema = {
 
@@ -14,7 +14,7 @@ import BaseService from './baseService';
 
     };
 
- class GenreService extends BaseService {
+    module.exports = class GenreService extends BaseService {
 
     constructor() {
         super(schema, genre);
@@ -53,7 +53,31 @@ import BaseService from './baseService';
             session.endSession();
         }
     };
+
+    async update(genre) {
+        const session =  await super.getSession();
+
+        try {
+            let errors = await this.validation(genre);
+           
+            const genreDb = await super.findById(genre._id);
+
+            if (!genreDb) {
+                return { error: errors, statusCode: 400, message: 'Genero não encontrado' };
+            }
+
+            let genreSaved = await super.save(genre, session);
+
+            return { genre: genreSaved.toClient(), statusCode: 200 };
+        } catch (e) {
+
+            if (session.inTransaction()) {
+                await session.abortTransaction();
+            }
+
+            throw e;
+        } finally {
+                session.endSession();
+        }
+    };
 }
-
-export default GenreService;
-

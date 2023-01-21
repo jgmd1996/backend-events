@@ -1,6 +1,6 @@
 const validate = require('validate.js');
 
-class BaseService {
+module.exports = class BaseService {
 
     constructor(schema, model) {
         this.schema = schema;
@@ -190,5 +190,3 @@ class BaseService {
         ).exec();
     };
 }
-
-export default BaseService;

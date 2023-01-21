@@ -1,14 +1,13 @@
-import express from "express";
-import GenreController from "../controllers/GenreController.js";
-
-
+const express = require('express');
 const router = express.Router();
 
-router
-  .get("/genre", GenreController.genreList)
-  .get("/genre/:id", GenreController.listGenreById)
-  .post("/genre", GenreController.registerGender)
-  .put("/genre/:id", GenreController.updateGender)
-  .delete("/genre/:id", GenreController.deleteGender)
+const genreController = require('../controllers/GenreController');
 
-export default router;   
+
+ // .get("/genre", GenreController.genreList)
+  router.get("/genre/:id", genreController.findById)
+  router.post("/genre", genreController.create)// registrar novo genero
+  router.put("/genre/:id", genreController.update)
+  //.delete("/genre/:id", GenreController.deleteGender)
+
+  module.exports = router; 
