@@ -7,15 +7,16 @@ exports.create = async function (req, res, next) {
 
   try {
 
-     const genreSaved = genreService.create(req.body);
+     const genreSaved = await genreService.create(req.body);
+     console.log('genreSaved2', genreSaved);
     
-    res.status(genreSaved.statusCode).send(genreSaved.genre.toJSON())
+    res.status(genreSaved.statusCode).json(genreSaved)
 
   } catch (e) {
       return next(e);
   }
 };
-
+//ok
 exports.update = async function (req, res, next) {
 
   try {
@@ -33,7 +34,7 @@ exports.update = async function (req, res, next) {
   }
 };
 
-
+//ok
 exports.findById = async function (req, res, next) {
 
   try {
@@ -46,7 +47,7 @@ exports.findById = async function (req, res, next) {
           return res.status(404).send({message: 'Genero não encontrado.'});
       }
 
-      return res.status(200).json({genre: genre ? genre.toClient() : genre});
+      return res.status(200).json({genre: genre});
 
   } catch (e) {
       return next(e);

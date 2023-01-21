@@ -1,5 +1,5 @@
 const validate = require('validate.js');
-const genre = require('../models/Genre');
+const Genre = require('../models/Genre');
 const BaseService = require("./baseService");
 
     const schema = {
@@ -17,7 +17,7 @@ const BaseService = require("./baseService");
     module.exports = class GenreService extends BaseService {
 
     constructor() {
-        super(schema, genre);
+        super(schema, Genre);
     };
 
     async validation(genre) {//
@@ -34,12 +34,14 @@ const BaseService = require("./baseService");
                 const errorMessage = await this.buildErrorMessage(errors);
                 return { error: errors, statusCode: 400, message: errorMessage };
             }
-
-            const genreDb = new genre({ ...genre });
+console.log("Genre", Genre)
+            const genreDb = new Genre({ ...genre });
+            console.log("genreDb", genreDb)
             await session.startTransaction();
             let genreSaved = await super.save(genreDb, session);
-
+            console.log("genreSaved", genreSaved)
             await session.commitTransaction();
+            
             return { genre: genreSaved, statusCode: 201 };
 
         } catch (e) {
@@ -60,7 +62,7 @@ const BaseService = require("./baseService");
         try {
             let errors = await this.validation(genre);
            
-            const genreDb = await super.findById(genre._id);
+            const genreDb = await super.findById(genre.id);
 
             if (!genreDb) {
                 return { error: errors, statusCode: 400, message: 'Genero não encontrado' };
@@ -68,7 +70,7 @@ const BaseService = require("./baseService");
 
             let genreSaved = await super.save(genre, session);
 
-            return { genre: genreSaved.toClient(), statusCode: 200 };
+            return { genre: genreSaved, statusCode: 200 };
         } catch (e) {
 
             if (session.inTransaction()) {
