@@ -2,19 +2,19 @@ const validate = require('validate.js');
 const Genre = require('../models/Genre');
 const BaseService = require("./baseService");
 
-    const schema = {
+const schema = {
 
-        name: {
-            presence: { allowEmpty: false, message: '^Nome é obrigatório. ' },
-            length: {
-                maximum: 200,
-                tooLong: '^Nome deve conter no máximo 200 caracteres. '
-            }
-        },
+    name: {
+        presence: { allowEmpty: false, message: '^Nome é obrigatório. ' },
+        length: {
+            maximum: 200,
+            tooLong: '^Nome deve conter no máximo 200 caracteres. '
+        }
+    },
 
-    };
+};
 
-    module.exports = class GenreService extends BaseService {
+module.exports = class GenreService extends BaseService {
 
     constructor() {
         super(schema, Genre);
@@ -34,14 +34,11 @@ const BaseService = require("./baseService");
                 const errorMessage = await this.buildErrorMessage(errors);
                 return { error: errors, statusCode: 400, message: errorMessage };
             }
-console.log("Genre", Genre)
             const genreDb = new Genre({ ...genre });
-            console.log("genreDb", genreDb)
             await session.startTransaction();
             let genreSaved = await super.save(genreDb, session);
-            console.log("genreSaved", genreSaved)
             await session.commitTransaction();
-            
+
             return { genre: genreSaved, statusCode: 201 };
 
         } catch (e) {
@@ -57,11 +54,11 @@ console.log("Genre", Genre)
     };
 
     async update(genre) {
-        const session =  await super.getSession();
+        const session = await super.getSession();
 
         try {
             let errors = await this.validation(genre);
-           
+
             const genreDb = await super.findById(genre.id);
 
             if (!genreDb) {
@@ -79,7 +76,11 @@ console.log("Genre", Genre)
 
             throw e;
         } finally {
-                session.endSession();
+            session.endSession();
         }
     };
+
+    async findAll() {
+        return await super.findAll();
+    }
 }

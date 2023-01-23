@@ -53,3 +53,20 @@ exports.findById = async function (req, res, next) {
       return next(e);
   }
 };
+
+exports.findByAll = async function (req, res, next) {
+
+  try {
+
+      const genre = await genreService.findAll();
+
+      if (!genre || genre.length === 0) {
+          return res.status(404).send({message: 'Generos não encontrados.'});
+      }
+
+      return res.status(200).json({genre: genre});
+
+  } catch (e) {
+      return next(e);   
+  }
+};
