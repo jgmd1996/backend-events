@@ -41,6 +41,10 @@ module.exports = class BaseService {
         return await this.model.findById(id).exec();
     };
 
+    async findByIdAndDelete(id) {
+        return await this.model.findByIdAndDelete(id).exec();
+    };
+
     async findByManyIds(ids, key = '_id') {
         let filter = {};
         filter[key] = {$in: ids};

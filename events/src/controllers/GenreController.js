@@ -1,7 +1,5 @@
 const GenreService = require('../service/genreService');
-
 let genreService = new GenreService();
-
 
 exports.create = async function (req, res, next) {
 
@@ -16,7 +14,7 @@ exports.create = async function (req, res, next) {
       return next(e);
   }
 };
-//ok
+
 exports.update = async function (req, res, next) {
 
   try {
@@ -26,7 +24,6 @@ exports.update = async function (req, res, next) {
       };
 
       const genreSaved = await genreService.update(genre);
-
       return res.status(genreSaved.statusCode).json(genreSaved);
 
   } catch (e) {
@@ -34,13 +31,11 @@ exports.update = async function (req, res, next) {
   }
 };
 
-//ok
 exports.findById = async function (req, res, next) {
 
   try {
 
       const { genreId } = req.params;
-
       const genre = await genreService.findById(genreId);
 
       if (!genre) {
@@ -70,3 +65,20 @@ exports.findByAll = async function (req, res, next) {
       return next(e);   
   }
 };
+
+exports.deleteGenre = async function (req, res, next) {
+
+    try {
+        const { genreId } = req.params;
+        const genre = await genreService.findByIdAndDelete(genreId);
+  
+        if (!genre) {
+            return res.status(404).send({message: 'Genero não encontrado.'});
+        }
+  
+        return res.status(200).send({message: 'Genero deletado.'});
+  
+    } catch (e) {
+        return next(e);
+    }
+  };
