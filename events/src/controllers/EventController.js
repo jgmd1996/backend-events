@@ -1,69 +1,67 @@
+const EventService = require('../service/eventService');
+let eventService = new EventService();
 
-// import event from "../models/Event.js";
+exports.create = async function (req, res, next) {
 
-// class EventController {
-  
-//   static eventList= (req, res) => {
-//     event.find()
-//     .populate('genre')
-//     .populate('band')
-//     .exec((err, event) => {
-//       res.status(200).json(event)
-//   })
-//   }
-  
-//   static listEventById = (req, res) => {
-//     const id = req.params.id;
+  try {
+     const eventSaved = await eventService.create(req.body);
+    res.status(eventSaved.statusCode).json(eventSaved)
+  } catch (e) {
+      return next(e);
+  }
+};
 
-//     event.findById(id)
-//     .populate('genre', 'name')
-//     .populate('event', 'name')
-//     .exec((err, event) => {
-//       if(err) {
-//         res.status(400).send({message: `${err.message} - Id do evento não localizado.`})
-//       } else {
-//         res.status(200).send(event);
-//       }
-//     })
-//   }
-  
-//   static registerEvent = (req, res) => {
-//     let events = new event(req.body);
+exports.update = async function (req, res, next) {
+   
+  try {
+      let event = {
+          ...req.body
+      };
+      
+      const eventSaved = await eventService.update(event);
+      return res.status(eventSaved.statusCode).json(eventSaved);
+  } catch (e) {
+      return next(e);
+  }
+};
 
-//     events.save((err) => {
+exports.findById = async function (req, res, next) {
 
-//       if(err) {
-//         res.status(500).send({message: `${err.message} - falha ao cadastrar a evento.`})
-//       } else {
-//         res.status(201).send(events.toJSON())
-//       }
-//     })
-//   }
-  
-//   static updateEvent = (req, res) => {
-//     const id = req.params.id;
+  try {
+      const { eventId } = req.params;
+      const event = await eventService.findById(eventId);
+      if (!event) {
+          return res.status(404).send({message: 'Evento não encontrado.'});
+      }
+      return res.status(200).json({event: event});
+  } catch (e) {
+      return next(e);
+  }
+};
 
-//     event.findByIdAndUpdate(id, {$set: req.body}, (err) => {
-//       if(!err) {
-//         res.status(200).send({message: 'Evento atualizado com sucesso'})
-//       } else {
-//         res.status(500).send({message: err.message})
-//       }
-//     })
-//   }
-  
-//   static deleteEvent = (req, res) => {
-//     const id = req.params.id;
+exports.findByAll = async function (req, res, next) {
+     
+  try {
+      const event = await eventService.findAll();
+      if (!event || event.length === 0) {
+          return res.status(404).send({message: 'Evento não encontradas.'});
+      }
+      return res.status(200).json({events: event});
+  } catch (e) {
+      return next(e);   
+  }
+};
 
-//     event.findByIdAndDelete(id, (err) => {
-//       if(!err){
-//         res.status(200).send({message: 'Evento removida com sucesso'})
-//       } else {
-//         res.status(500).send({message: err.message})
-//       }
-//     })
-//   }
+exports.deleteEvent = async function (req, res, next) {
 
-// }
-
-// export default EventController
+    try {
+        const { eventId } = req.params;
+        const event = await eventService.findByIdAndDelete(eventId);
+        if (!event) {
+            return res.status(404).send({message: 'Evento não encontrado.'});
+        }
+        return res.status(200).send({message: 'Evento deletado.'});
+    } catch (e) {
+        return next(e);
+    }
+  };

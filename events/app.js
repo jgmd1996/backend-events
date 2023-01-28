@@ -1,6 +1,7 @@
 const express = require('express');
 const genre = require('./src/routes/GenreRoutes');
 const band = require('./src/routes/BandRoutes');
+const event = require('./src/routes/EventRoutes')
 const cors = require('cors');
 const mongoose = require( "mongoose");
 
@@ -38,7 +39,8 @@ app.route('/').get((req, res) =>{
 app.use(
     express.json(),
     genre,
-    band
+    band,
+    event
 )
 
  app.listen(port, () => {

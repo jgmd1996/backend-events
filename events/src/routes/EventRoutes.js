@@ -1,14 +1,12 @@
-// import express from "express";
-// import EventController from "../controllers/EventController.js";
+const express = require('express');
+const router = express.Router();
 
-// const router = express.Router();
+const eventController = require ("../controllers/EventController.js");
 
-// router
-//   .get("/event", EventController.eventList)
-//   //.get("/produtos/busca", ProdutoController.listarProdutoPorEditora)
-//   .get("/event/:id", EventController.listEventById)
-//   .post("/event", EventController.registerEvent)
-//   .put("/event/:id", EventController.updateEvent)
-//   .delete("/event/:id", EventController.deleteEvent)
+  router.get("/event", eventController.findByAll)
+  router.get("/event/:eventId", eventController.findById)
+  router.post("/event", eventController.create)
+  router.put("/event/", eventController.update)
+  router.delete("/event/:eventId", eventController.deleteEvent)
 
-// export default router;   
+  module.exports = router; 
