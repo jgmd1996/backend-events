@@ -1,69 +1,83 @@
+const BandService = require('../service/bandService');
+let bandService = new BandService();
 
-// import band from "../models/Band.js";
+exports.create = async function (req, res, next) {
 
-// class BandController {
+  try {
+
+     const bandSaved = await bandService.create(req.body);
+    res.status(bandSaved.statusCode).json(bandSaved)
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+exports.update = async function (req, res, next) {
+   
+  try {
+
+      let band = {
+          ...req.body
+      };
+      
+
+      const bandSaved = await bandService.update(band);
+      return res.status(bandSaved.statusCode).json(bandSaved);
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+exports.findById = async function (req, res, next) {
+
+  try {
+
+      const { bandId } = req.params;
+      const band = await bandService.findById(bandId);
+      if (!band) {
+          return res.status(404).send({message: 'Banda não encontrado.'});
+      }
+
+      return res.status(200).json({band: band});
+
+  } catch (e) {
+      return next(e);
+  }
+};
+
+exports.findByAll = async function (req, res, next) {
+    
+    
+  try {
+     
+      const band = await bandService.findAll();
+      
+      if (!band || band.length === 0) {
+          return res.status(404).send({message: 'Bandas não encontradas.'});
+      }
+
+      return res.status(200).json({bands: band});
+
+  } catch (e) {
+      return next(e);   
+  }
+};
+
+exports.deleteBand = async function (req, res, next) {
+
+    try {
+        const { bandId } = req.params;
+        const band = await bandService.findByIdAndDelete(bandId);
   
-//   static bandList= (req, res) => {
-//     band.find()
-//     .populate('genre')
-//     .populate('event')
-//     .exec((err, band) => {
-//       res.status(200).json(band)
-//   })
-//   }
+        if (!band) {
+            return res.status(404).send({message: 'Banda não encontrado.'});
+        }
   
-//   static listBandById = (req, res) => {
-//     const id = req.params.id;
-
-//     band.findById(id)
-//     .populate('genre', 'name')
-//     .populate('event', 'name')
-//     .exec((err, band) => {
-//       if(err) {
-//         res.status(400).send({message: `${err.message} - Id da banda não localizado.`})
-//       } else {
-//         res.status(200).send(band);
-//       }
-//     })
-//   }
+        return res.status(200).send({message: 'Banda deletado.'});
   
-//   static registerband = (req, res) => {
-//     let bands = new band(req.body);
-
-//     bands.save((err) => {
-
-//       if(err) {
-//         res.status(500).send({message: `${err.message} - falha ao cadastrar a banda.`})
-//       } else {
-//         res.status(201).send(bands.toJSON())
-//       }
-//     })
-//   }
-  
-//   static updateBand = (req, res) => {
-//     const id = req.params.id;
-
-//     band.findByIdAndUpdate(id, {$set: req.body}, (err) => {
-//       if(!err) {
-//         res.status(200).send({message: 'Banda atualizado com sucesso'})
-//       } else {
-//         res.status(500).send({message: err.message})
-//       }
-//     })
-//   }
-  
-//   static deleteband = (req, res) => {
-//     const id = req.params.id;
-
-//     band.findByIdAndDelete(id, (err) => {
-//       if(!err){
-//         res.status(200).send({message: 'Banda removida com sucesso'})
-//       } else {
-//         res.status(500).send({message: err.message})
-//       }
-//     })
-//   }
-
-// }
-
-// export default BandController
+    } catch (e) {
+        return next(e);
+    }
+  };

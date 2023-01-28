@@ -1,14 +1,12 @@
-// import express from "express";
-// import BandController from "../controllers/BandController.js";
+const express = require('express');
+const router = express.Router();
 
-// const router = express.Router();
+const bandController = require ("../controllers/BandController.js");
 
-// router
-//   .get("/band", BandController.bandList)
-//   //.get("/produtos/busca", ProdutoController.listarProdutoPorEditora)
-//   .get("/band/:id", BandController.listBandById)
-//   .post("/band", BandController.registerband)
-//   .put("/band/:id", BandController.updateBand)
-//   .delete("/band/:id", BandController.deleteband)
+  router.get("/band", bandController.findByAll)
+  router.get("/band/:bandId", bandController.findById)
+  router.post("/band", bandController.create)
+  router.put("/band/", bandController.update)
+  router.delete("/band/:bandId", bandController.deleteBand)
 
-// export default router;   
+  module.exports = router; 

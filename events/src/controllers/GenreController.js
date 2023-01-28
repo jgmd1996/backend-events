@@ -6,8 +6,6 @@ exports.create = async function (req, res, next) {
   try {
 
      const genreSaved = await genreService.create(req.body);
-     console.log('genreSaved2', genreSaved);
-    
     res.status(genreSaved.statusCode).json(genreSaved)
 
   } catch (e) {
@@ -59,7 +57,7 @@ exports.findByAll = async function (req, res, next) {
           return res.status(404).send({message: 'Generos não encontrados.'});
       }
 
-      return res.status(200).json({genre: genre});
+      return res.status(200).json({genres: genre});
 
   } catch (e) {
       return next(e);   
