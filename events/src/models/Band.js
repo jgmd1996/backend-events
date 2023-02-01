@@ -11,7 +11,7 @@ const bandSchema = new mongoose.Schema(
         bandPhoto: {type: String, required: true},
         targetAudience: {type: String, required: true},
         cache: {type: Number, required: true},
-        genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
+        genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre',required: true }],
         event: [{ type: mongoose.Schema.Types.ObjectId, ref: 'event' }],
     },
     {

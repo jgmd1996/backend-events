@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema(
         bandInstruments: { type: String, required: true },
         expectedAudience: {type: Number, required: true},
         genre: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genre' }],
-        band: [{ type: mongoose.Schema.Types.ObjectId, ref: 'band' }],
+        band: [{ type: mongoose.Schema.Types.ObjectId, ref: 'band', required: true}],
   },
   {
       versionKey: false

@@ -20,7 +20,7 @@ module.exports = class GenreService extends BaseService {
         super(schema, Genre);
     };
 
-    async validation(genre) {//
+    async validation(genre) {
         return super.validation(genre);
     };
 
@@ -28,7 +28,7 @@ module.exports = class GenreService extends BaseService {
         const session = await super.getSession();
 
         try {
-            let errors = await this.validation(genre);//
+            let errors = await this.validation(genre);
 
             if (errors) {
                 const errorMessage = await this.buildErrorMessage(errors);
